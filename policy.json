@@ -1,36 +1,26 @@
 {
-  "type": "Microsoft.Authorization/policyDefinitions",
-  "name": "tagging-policy", 
   "properties": {
-      "mode": "all",
-      "displayName": "Deny untagged resources deployement",
-      "description": "This policy check if a tag is present on a resource and deny deployement otherwise",
-      "parameters": {
-        "tagName": {
-          "type": "String",
-          "metadata": {
-            "displayName": "Tag Name",
-            "description": "Name of the Tag"
-          }
-        },
-        "tagValue": {
-          "type": "String",
-          "metadata": {
-            "displayName": "Tag Value",
-            "description": "Value of the Tag"
-          }
-        }
+    "displayName": "Deny untagged resources deployement",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "This policy check if a tag is present on a resource and deny deployement otherwise",
+    "metadata": {
+      "createdBy": "",
+      "createdOn": "2021-08-13T08:43:29.4637506Z",
+      "updatedBy": null,
+      "updatedOn": null
+    },
+    "policyRule": {
+      "if": {
+        "field": "tags",
+        "exists": "false"
       },
-      "policyRule": {
-        "if": {
-          "not": {
-            "field": "[concat('tags[', parameters('tagName'), ']')]",
-            "equals": "[parameters('tagValue')]"
-          }
-        },
-        "then": {
-          "effect": "deny"
-        }
+      "then": {
+        "effect": "deny"
       }
-  }
+    }
+  },
+  "id": "/subscriptions/<subscriptionId>/providers/Microsoft.Authorization/policyDefinitions/tagging-policy",
+  "type": "Microsoft.Authorization/policyDefinitions",
+  "name": "tagging-policy"
 }
