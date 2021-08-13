@@ -5,4 +5,5 @@ az policy definition create --name tagging-policy --display-name "Deny untagged 
 # Create the Policy Assignment
 az policy assignment create --name 'tagging-policy-assignment' --display-name "Deny untagged resources deployement Assignment" --scope /subscriptions/<subscriptionId> --policy /subscriptions/<subscriptionId>/providers/Microsoft.Authorization/policyDefinitions/tagging-policy
 
-#### ... ####
+#### Packer ####
+packer build -var 'subscription_id=<subscriptionId>' server.json
