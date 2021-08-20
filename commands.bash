@@ -10,6 +10,6 @@ packer build -var 'subscription_id=<subscriptionId>' server.json
 
 #### Terraform ####
 terraform plan -out solution.plan
-terraform apply
+terraform apply "solution.plan"
 terraform show
 terraform destroy
