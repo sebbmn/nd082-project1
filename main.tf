@@ -41,7 +41,19 @@ resource "azurerm_network_security_group" "main" {
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "Tcp"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = azurerm_subnet.internal.address_prefix
+    destination_address_prefix = azurerm_subnet.internal.address_prefix
+  }
+
+  security_rule {
+    name                       = "denyDirectAccess"
+    priority                   = 1000
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
     source_address_prefix      = "*"

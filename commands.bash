@@ -7,3 +7,9 @@ az policy assignment create --name 'tagging-policy-assignment' --display-name "D
 
 #### Packer ####
 packer build -var 'subscription_id=<subscriptionId>' server.json
+
+#### Terraform ####
+terraform plan -out solution.plan
+terraform apply
+terraform show
+terraform destroy
