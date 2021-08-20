@@ -61,6 +61,48 @@ resource "azurerm_network_interface" "main" {
   }
 }
 
+/* Create a public IP adress */
+resource "azurerm_public_ip" "pip" {
+  name                = "${var.prefix}-pip"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  allocation_method   = "Dynamic"
+}
+
+/* Create a load balancer, a backend address pool and address pool association for the NIC & LB */
+resource "azurerm_lb" "main" {
+  name                = "${var.prefix}-lb"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  frontend_ip_configuration {
+    name                 = "PublicIPAddress"
+    public_ip_address_id = azurerm_public_ip.pip.id
+  }
+}
+
+resource "azurerm_lb_backend_address_pool" "main" {
+  loadbalancer_id     = azurerm_lb.main.id
+  name                = "BackEndAddressPool"
+}
+
+resource "azurerm_network_interface_backend_address_pool_association" "main" {
+  count                   = var.instance_count
+  backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
+  ip_configuration_name   = "primary"
+  network_interface_id    = element(azurerm_network_interface.main.*.id, count.index)
+}
+
+/* Create a VM availability set */
+resource "azurerm_availability_set" "avset" {
+  name                         = "${var.prefix}-avset"
+  location                     = azurerm_resource_group.main.location
+  resource_group_name          = azurerm_resource_group.main.name
+  platform_fault_domain_count  = 2
+  platform_update_domain_count = 2
+  managed                      = true
+}
+
 /* Create (instance_count) * VM */
 resource "azurerm_linux_virtual_machine" "main" {
   count                           = var.instance_count

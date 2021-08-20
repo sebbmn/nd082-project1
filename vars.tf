@@ -8,7 +8,7 @@ variable "location" {
 
 variable "instance_count" {
   type        = number
-  description = "Number of VM instances to be created"
+  description = "Number of VM instances & NICs to be created"
 
   validation {
     condition     = var.instance_count >= 2 && var.instance_count <= 5
