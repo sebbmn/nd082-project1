@@ -8,7 +8,6 @@ variable "location" {
 
 variable "instance_count" {
   type        = number
-  default     = 2
   description = "Number of VM instances to be created"
 
   validation {
