@@ -6,6 +6,9 @@ provider "azurerm" {
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-rg"
   location = var.location
+  tags = {
+    project_name = var.prefix
+  }
 }
 
 /* Create a virtual network */
@@ -14,6 +17,9 @@ resource "azurerm_virtual_network" "main" {
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
+  tags = {
+    project_name = var.prefix
+  }
 }
 
 /* Create a subnet */
@@ -59,6 +65,9 @@ resource "azurerm_network_interface" "main" {
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
   }
+  tags = {
+    project_name = var.prefix
+  }
 }
 
 /* Create a public IP adress */
@@ -67,6 +76,9 @@ resource "azurerm_public_ip" "pip" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   allocation_method   = "Dynamic"
+  tags = {
+    project_name = var.prefix
+  }
 }
 
 /* Create a load balancer, a backend address pool and address pool association for the NIC & LB */
@@ -78,6 +90,9 @@ resource "azurerm_lb" "main" {
   frontend_ip_configuration {
     name                 = "PublicIPAddress"
     public_ip_address_id = azurerm_public_ip.pip.id
+  }
+  tags = {
+    project_name = var.prefix
   }
 }
 
@@ -101,6 +116,9 @@ resource "azurerm_availability_set" "avset" {
   platform_fault_domain_count  = 2
   platform_update_domain_count = 2
   managed                      = true
+  tags = {
+    project_name = var.prefix
+  }
 }
 
 /* Create (instance_count) * VM */
@@ -127,5 +145,8 @@ resource "azurerm_linux_virtual_machine" "main" {
   os_disk {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
+  }
+  tags = {
+    project_name = var.prefix
   }
 }
