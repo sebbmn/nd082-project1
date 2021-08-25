@@ -16,7 +16,7 @@
     "image_offer": "UbuntuServer",
     "image_sku": "18.04-LTS",
 
-    "managed_image_resource_group_name": "nd082-project1-rg",
+    "managed_image_resource_group_name": "nd082-project1-image-rg",
     "managed_image_name": "nd082Project1Image",
 
 		"azure_tags": {

@@ -133,6 +133,12 @@ resource "azurerm_availability_set" "avset" {
   }
 }
 
+/* Reference a packer image */
+data "azurerm_image" "packer-image" {
+  name                = "nd082Project1Image"
+  resource_group_name = "nd082-project1-image-rg"
+}
+
 /* Create (instance_count) * VM */
 resource "azurerm_linux_virtual_machine" "main" {
   count                           = var.instance_count
@@ -147,13 +153,8 @@ resource "azurerm_linux_virtual_machine" "main" {
     azurerm_network_interface.main[count.index].id,
   ]
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-
+  source_image_id = data.azurerm_image.packer-image.id
+  
   os_disk {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
