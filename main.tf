@@ -125,8 +125,8 @@ resource "azurerm_availability_set" "avset" {
   name                         = "${var.prefix}-avset"
   location                     = azurerm_resource_group.main.location
   resource_group_name          = azurerm_resource_group.main.name
-  platform_fault_domain_count  = 2
-  platform_update_domain_count = 2
+  platform_fault_domain_count  = var.instance_count
+  platform_update_domain_count = var.instance_count
   managed                      = true
   tags = {
     project_name = var.prefix
@@ -145,6 +145,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   name                            = "${var.prefix}-vm${count.index}"
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
+  availability_set_id             = azurerm_availability_set.avset.id
   size                            = "Standard_D2s_v3"
   admin_username                  = "${var.username}"
   admin_password                  = "${var.password}"
