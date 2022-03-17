@@ -58,6 +58,3 @@ terraform destroy
 ```
 
 > :warning: **Don't forget to destroy all unused ressources in Azure to avoid unwanted costs!**
-
-### Output
-**Your words here**
